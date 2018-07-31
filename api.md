@@ -154,8 +154,19 @@ pagesize没有人为上限，不过一般超过100000那边服务器会崩。
 
 返回结果和获取洞时的结果，除了没有整体的timestamp参数，其他都一样。
 
+### 零碎说明
 
-
+获得最近的30个洞有另一个方法：
+```
 http://www.pkuhelper.com/services/pkuhole/api.php?action=refreshlist
+```
+和`getlist`貌似没有什么区别。
 
-http://www.pkuhelper.com/services/pkuhole/images/ images
+图片的URL是
+```
+http://www.pkuhelper.com/services/pkuhole/images/
+```
+音频的URL是
+```
+http://www.pkuhelper.com/services/pkuhole/audios/ 
+```
