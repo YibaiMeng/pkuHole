@@ -1,0 +1,5 @@
+# First name:
+python3 get_names.py | sort -u  | grep "[[:alpha:]]*$" -o | sort -u
+
+# Second name:
+python3 get_names.py | sort -u  | grep "[[:alpha:]]*\ " -o | sort -u
