@@ -40,6 +40,7 @@
 树洞提供获取洞和评论信息的功能，以及发布评论和树洞的功能。一切操作都是通过HTTP RESTful API的方式进行的。信息的获取不需要身份的验证，不过发帖和评论的过程是需要验证的。系统还提供按关键词检索的功能。
 
 具体的功能列表如下：
+- 随机的获取某个洞的信息。
 - 一页一页地获取洞的信息。每页为30个洞。获取的信息不含评论。
 - 获取某个洞的所有评论
 - 搜索含有特定关键词的洞
@@ -58,7 +59,44 @@
 
 User-Agent目前服务器没有校验，不过客户端用的是`Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36`。
 
-### 获取洞
+貌似这个API是支持跨域访问（CORS）的，可以直接集成到网页版里面。
+
+### 获取某个洞
+
+这个方法我是2018年9月才发现的。不知道之前是我漏掉了还是新加的。
+
+请求参数如下表所示：
+
+| 参数名称  | 数据类型 | 描述                |  是否必须  | 默认值/固定值  |
+| ---       | ---      | ---                 |   ---      | --             | 
+| action    | `str`    | 操作的行为描述      | 是         | getone        |
+| pid         | `int`    | 洞的pid           | 是         | -              |
+
+例子：获得PID为33333的洞
+```bash
+curl "http://www.pkuhelper.com/services/pkuhole/api.php?action=getone&pid=33333"
+```
+
+返回值例子如下
+```json
+{
+    "code":0,
+    "data":{
+        "pid":"33333",
+        "text":"re330 说得漂亮【你真的不是在打广告吗",
+        "type":"text",
+        "timestamp":"1437479025",
+        "reply":"0",
+        "likenum":"0",
+        "extra":"0",
+        "url":""
+    },
+    "tiemstamp":1536229453
+}
+```
+注意，现在的时间就是“tiemstamp”！他拼错了……
+
+### 获取一系列洞
 
 请求参数如下表所示：
 
@@ -129,6 +167,7 @@ curl http://www.pkuhelper.com/services/pkuhole/api.php?action=getcomment&pid=234
    "attention":0
 }
 ```
+attention什么意思不明，我还没遇到不是0的情况。
 
 ### 检索
 
@@ -148,9 +187,9 @@ curl http://www.pkuhelper.com/services/pkuhole/api.php?action=search&keywords=�
 
 如果keywords不填的话，将会按照时间顺序返回值。比如我想要最近10000条洞：
 ```bash
-curl http://www.pkuhelper.com/services/pkuhole/api.php?action=search&pagesize=10000
+curl "http://www.pkuhelper.com/services/pkuhole/api.php?action=search&pagesize=30000"
 ```
-pagesize没有人为上限，不过一般超过100000那边服务器会崩。
+pagesize没有人为上限，不过一般超过一万就可能要尝试多次，再大些可能那边服务器会崩。
 
 返回结果和获取洞时的结果，除了没有整体的timestamp参数，其他都一样。
 
